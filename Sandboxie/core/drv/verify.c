@@ -503,6 +503,15 @@ union _SCertInfo {
 
 _FX NTSTATUS KphValidateCertificate(void)
 {
+    // Nosupport patch {
+    Verify_CertInfo.valid = 1;
+    Verify_CertInfo.expired = 0;
+    Verify_CertInfo.outdated = 0;
+    Verify_CertInfo.business = 0;
+    Verify_CertInfo.evaluation = 0;
+    Verify_CertInfo.grace_period = 0;
+    return STATUS_SUCCESS;
+    // } Nosupport patch
     BOOLEAN CertDbg = FALSE;
 
     static const WCHAR *path_cert = L"%s\\Certificate.dat";
