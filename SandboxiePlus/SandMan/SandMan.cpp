@@ -2180,6 +2180,13 @@ void CSandMan::UpdateCertState()
 	}
 #endif
 
+#ifdef NOSUPPORT_PATCH
+	g_CertInfo.evaluation = 0;
+	g_CertInfo.valid = 1;
+	g_CertInfo.expired = 0;
+	g_CertInfo.outdated = 0;
+#endif
+
 	if (g_CertInfo.evaluation)
 	{
 		if (g_CertInfo.expired)
@@ -2188,6 +2195,9 @@ void CSandMan::UpdateCertState()
 	else
 	{
 		g_CertInfo.about_to_expire = g_CertInfo.expirers_in_sec > 0 && g_CertInfo.expirers_in_sec < (60 * 60 * 24 * 30);
+#ifdef NOSUPPORT_PATCH
+		g_CertInfo.about_to_expire = 0;
+#endif
 		if (g_CertInfo.outdated)
 			OnLogMessage(tr("The supporter certificate is not valid for this build, please get an updated certificate"));
 		// outdated always implicates it is no longer valid
