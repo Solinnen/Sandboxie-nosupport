@@ -78,6 +78,7 @@ void COptionsWindow::CreateGeneral()
 		}
 	}
 
+#ifndef NOSUPPORT_PATCH
 	if (g_Certificate.isEmpty()) {
 		QWidget* ExWidgets[] = { ui.chkSecurityMode, ui.chkLockDown, ui.chkRestrictDevices,
 			ui.chkPrivacy, ui.chkUseSpecificity,
@@ -85,6 +86,7 @@ void COptionsWindow::CreateGeneral()
 		for (QWidget** ExWidget = ExWidgets; *ExWidget != NULL; ExWidget++)
 			COptionsWindow__AddCertIcon(*ExWidget);
 	}
+#endif
 
 
 	m_HoldBoxType = false;

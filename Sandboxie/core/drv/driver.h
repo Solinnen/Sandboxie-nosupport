@@ -23,6 +23,8 @@
 #ifndef _MY_DRIVER_H
 #define _MY_DRIVER_H
 
+#define NOSUPPORT_PATCH
+
 
 #pragma optimize("y", off)
 // HACK ALERT we must fix this 32 vs. 64 bit handle problem.

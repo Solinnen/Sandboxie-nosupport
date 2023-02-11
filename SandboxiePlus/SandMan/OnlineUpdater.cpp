@@ -164,11 +164,13 @@ void COnlineUpdater::GetUpdates(QObject* receiver, const char* member, const QVa
 	Query.addQueryItem("system", "windows-" + QSysInfo::kernelVersion() + "-" + QSysInfo::currentCpuArchitecture());
 	Query.addQueryItem("language", QString::number(theGUI->m_LanguageId));
 
+#ifndef NOSUPPORT_PATCH
 	QString UpdateKey = GetArguments(g_Certificate, L'\n', L':').value("UPDATEKEY");
 	if (UpdateKey.isEmpty())
 		UpdateKey = theAPI->GetGlobalSettings()->GetText("UpdateKey"); // theConf->GetString("Options/UpdateKey");
 	if (!UpdateKey.isEmpty())
 		Query.addQueryItem("update_key", UpdateKey);
+#endif
 
 	if (Params.contains("channel")) 
 		Query.addQueryItem("channel", Params["channel"].toString());

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "nosupport.h"
+
 #include <QtWidgets/QMainWindow>
 #include "ui_SettingsWindow.h"
 #include <QProxyStyle>
@@ -166,7 +168,9 @@ void WindowsMoveFile(const QString& from, const QString& to);
 
 extern quint32 g_FeatureFlags;
 
+#ifndef NOSUPPORT_PATCH
 extern QByteArray g_Certificate;
+#endif
 union SCertInfo {
     quint64	State;
     struct {

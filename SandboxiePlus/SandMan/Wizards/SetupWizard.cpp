@@ -142,6 +142,7 @@ CIntroPage::CIntroPage(QWidget *parent)
     layout->addWidget(pNote);
 
     uchar BusinessUse = 2;
+#ifndef NOSUPPORT_PATCH
     if (!g_Certificate.isEmpty())
         BusinessUse = g_CertInfo.business ? 1 : 0;
     else {
@@ -149,6 +150,9 @@ CIntroPage::CIntroPage(QWidget *parent)
         if (theAPI->GetSecureParam("UsageFlags", &UsageFlags, sizeof(UsageFlags)))
             BusinessUse = (UsageFlags & 1) != 0 ? 1 : 0;
     }
+#else
+    BusinessUse = 0;
+#endif
     if (BusinessUse != 2) {
         m_pPersonal->setChecked(BusinessUse == 0);
         m_pBusiness->setChecked(BusinessUse == 1);
@@ -171,8 +175,10 @@ CIntroPage::CIntroPage(QWidget *parent)
 
 int CIntroPage::nextId() const
 {
+#ifndef NOSUPPORT_PATCH
     if(g_Certificate.isEmpty())
         return CSetupWizard::Page_Certificate;
+#endif
     return CSetupWizard::Page_UI;
 }
 
@@ -229,7 +235,11 @@ CCertificatePage::CCertificatePage(QWidget *parent)
 
 void CCertificatePage::initializePage()
 {
+#ifndef NOSUPPORT_PATCH
     m_pCertificate->setPlainText(g_Certificate);
+#else
+    m_pCertificate->setPlainText("No cert ~~~~~~");
+#endif
 
     uchar UsageFlags = 0;
     theAPI->GetSecureParam("UsageFlags", &UsageFlags, sizeof(UsageFlags));
@@ -284,9 +294,11 @@ bool CCertificatePage::isComplete() const
 bool CCertificatePage::validatePage()
 {
     QByteArray Certificate = m_pCertificate->toPlainText().toUtf8();
+#ifndef NOSUPPORT_PATCH
     if (!m_pEvaluate->isChecked() && !Certificate.isEmpty() && g_Certificate != Certificate) {
 		return CSettingsWindow::ApplyCertificate(Certificate, this);
     }
+#endif
     return true;
 }
 

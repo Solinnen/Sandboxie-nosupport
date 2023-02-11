@@ -107,7 +107,9 @@ Qt::CheckState CSettingsWindow__Int2Chk(int state)
 
 quint32 g_FeatureFlags = 0;
 
+#ifndef NOSUPPORT_PATCH
 QByteArray g_Certificate;
+#endif
 SCertInfo g_CertInfo = { 0 };
 
 CSettingsWindow::CSettingsWindow(QWidget* parent)
@@ -737,9 +739,17 @@ void CSettingsWindow::LoadSettings()
 void CSettingsWindow::UpdateCert()
 {
 	ui.lblCertExp->setVisible(false);
+#ifdef NOSUPPORT_PATCH
+	if (true)
+#else
 	if (!g_Certificate.isEmpty()) 
+#endif
 	{
+#ifdef NOSUPPORT_PATCH
+		ui.txtCertificate->setPlainText("There is no cert~~~");
+#else
 		ui.txtCertificate->setPlainText(g_Certificate);
+#endif
 		//ui.lblSupport->setVisible(false);
 
 		QPalette palette = QApplication::palette();
@@ -1044,6 +1054,7 @@ void CSettingsWindow::SaveSettings()
 	if (m_CertChanged && theAPI->IsConnected())
 	{
 		QByteArray Certificate = ui.txtCertificate->toPlainText().toUtf8();	
+#ifndef NOSUPPORT_PATCH
 		if (g_Certificate != Certificate) {
 
 			QPalette palette = QApplication::palette();
@@ -1064,6 +1075,7 @@ void CSettingsWindow::SaveSettings()
 
 			ui.txtCertificate->setPalette(palette);
 		}
+#endif
 
 		m_CertChanged = false;
 	}
@@ -1119,9 +1131,11 @@ bool CSettingsWindow::ApplyCertificate(const QByteArray &Certificate, QWidget* w
 			return false;
 		}
 	}
+#ifndef NOSUPPORT_PATCH
 	else if(!g_Certificate.isEmpty()){
 		WindowsMoveFile(CertPath.replace("/", "\\"), "");
 	}
+#endif
 
 	if (Certificate.isEmpty())
 		return false;
@@ -1129,7 +1143,9 @@ bool CSettingsWindow::ApplyCertificate(const QByteArray &Certificate, QWidget* w
 	if (!theAPI->ReloadCert().IsError())
 	{
 		g_FeatureFlags = theAPI->GetFeatureFlags();
+#ifndef NOSUPPORT_PATCH
 		g_Certificate = Certificate;
+#endif
 		theGUI->UpdateCertState();
 
 		if (g_CertInfo.expired || g_CertInfo.outdated) {
@@ -1149,7 +1165,9 @@ bool CSettingsWindow::ApplyCertificate(const QByteArray &Certificate, QWidget* w
 		QMessageBox::critical(widget, "Sandboxie-Plus", tr("This support certificate is not valid."));
 
 		g_CertInfo.State = 0;
+#ifndef NOSUPPORT_PATCH
 		g_Certificate.clear();
+#endif
 		return false;
 	}
 }
@@ -1493,6 +1511,8 @@ void CSettingsWindow::CertChanged()
 
 void CSettingsWindow::LoadCertificate(QString CertPath)
 {
+#ifndef NOSUPPORT_PATCH
+
 #ifdef _DEBUG
 	if (GetKeyState(VK_CONTROL) & 0x8000) {
 		g_Certificate.clear();
@@ -1508,6 +1528,7 @@ void CSettingsWindow::LoadCertificate(QString CertPath)
 		g_Certificate = CertFile.readAll();
 		CertFile.close();
 	}
+#endif
 }
 
 void WindowsMoveFile(const QString& From, const QString& To)

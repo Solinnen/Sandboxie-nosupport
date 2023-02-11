@@ -23,10 +23,15 @@ int main(int argc, char *argv[])
 	*wcsrchr(szPath, L'\\') = L'\0';
 	QString AppDir = QString::fromWCharArray(szPath);
 
+#ifdef NOSUPPORT_PATCH
+	CSettingsWindow::LoadCertificate(AppDir + "\\Certificate.dat");
+	g_CertInfo.business = false;
+#else
 	if (QFile::exists(AppDir + "\\Certificate.dat")) {
 		CSettingsWindow::LoadCertificate(AppDir + "\\Certificate.dat");
 		g_CertInfo.business = GetArguments(g_Certificate, L'\n', L':').value("TYPE").toUpper().contains("BUSINESS");
 	}
+#endif
 
 	// use a shared setting location when used in a business environment for easier administration
 	theConf = new CSettings(AppDir, "Sandboxie-Plus", g_CertInfo.business);
