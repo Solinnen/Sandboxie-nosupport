@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../nosupport.h"
+#include "../SandMan/nosupport.h"
 
 #define SANDBOXIE		L"Sandboxie"
 

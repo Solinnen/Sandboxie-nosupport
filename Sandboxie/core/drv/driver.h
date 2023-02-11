@@ -23,7 +23,7 @@
 #ifndef _MY_DRIVER_H
 #define _MY_DRIVER_H
 
-#define NOSUPPORT_PATCH
+#include "../../SandMan/nosupport.h"
 
 
 #pragma optimize("y", off)
