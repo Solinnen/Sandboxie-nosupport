@@ -2209,6 +2209,9 @@ quint64 CSbieAPI::GetCertState()
 	args->info_len.val = len;
 
 	NTSTATUS status = m->IoControl(parms);
+	#ifdef NOSUPPORT_PATCH
+	return STATUS_SUCCESS;
+	#endif
 	if (!NT_SUCCESS(status))
 		return 0;
 
